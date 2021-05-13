@@ -25,6 +25,12 @@ namespace GildedRose.UnitTests
         // quality +2 when 10 or less days
         // quality +3 when 5 days or less
 
+        // Conjured stuff:
+        // Twice as fast as ordinary stuff, which means:
+        // Each day -2 quality and
+        // when sellin < 0 then quality drops by -4
+        // quality can be 0 as minimum and 50 as maximum
+
         [Theory]
         [InlineData("Cola", 5, 7, 6)]
         [InlineData("Cola", 0, 2, 0)]
@@ -44,7 +50,12 @@ namespace GildedRose.UnitTests
         [InlineData("Backstage passes to a TAFKAL80ETC concert", 1, 47, 50)]
         [InlineData("Backstage passes to a TAFKAL80ETC concert", 1, 49, 50)] // edge case, only +1
         [InlineData("Backstage passes to a TAFKAL80ETC concert", 0, 50, 0)] // edge case, goes to 0
-       // [InlineData("Conjured Mana Cake", 0, 50, 0)] // implement
+        [InlineData("Conjured Mana Cake", 5, 10, 8)]
+        [InlineData("Conjured Mana Cake", 2, 1, 0)]
+        [InlineData("Conjured Mana Cake", 0, 10, 6)]
+        [InlineData("Conjured Mana Cake", -1, 6, 2)]
+        [InlineData("Conjured Mana Cake", -5, 0, 0)]
+        [InlineData("Conjured Mana Cake", -5, 2, 0)]
         public void UpdateQuality_Quality_RetursCorrectQuality(string name, int sellIn, int quality, int expectedQuality)
         {
             // Arrange
