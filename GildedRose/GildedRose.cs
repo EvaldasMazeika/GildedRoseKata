@@ -4,99 +4,30 @@ namespace GildedRose
 {
     public class GildedRose
     {
-        private readonly IList<Item> Items;
+        private readonly IList<Item> items;
+
+        public IEnumerable<Item> Items 
+        { 
+            get { return items; } 
+        }
 
         public GildedRose(IList<Item> items)
         {
-            Items = items;
+            this.items = items;
         }
 
         public void UpdateQuality()
         {
-            for (var i = 0; i < Items.Count; i++)
+            foreach (var item in items)
             {
-                if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                {
-                    if (Items[i].Quality > 0)
-                    {
-                        if (Items[i].Name != "Sulfuras, Hand of Ragnaros" && Items[i].Name != "Conjured Mana Cake")
-                        {
-                            Items[i].Quality = Items[i].Quality - 1;
-                        }
+                // Since there is possibility that new items with unique logic will be added in the future
+                // to avoid if else hell and SOLID violation - smart idea to extend products. 
 
-                        // temp solution
-                        if (Items[i].Name == "Conjured Mana Cake")
-                        {
+                // this is more like a service which doesnt hold any state jsut does calculation for specific type of products. 
+                var product = GoodsFactory.Get(item.Name);
 
-                            Items[i].Quality = Items[i].Quality == 1 ? 0 : Items[i].Quality - 2;
-                        }
-                    }
-                }
-                else
-                {
-                    if (Items[i].Quality < 50)
-                    {
-                        Items[i].Quality = Items[i].Quality + 1;
-
-                        if (Items[i].Name == "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].SellIn < 11)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-
-                            if (Items[i].SellIn < 6)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                {
-                    Items[i].SellIn = Items[i].SellIn - 1;
-                }
-
-                if (Items[i].SellIn < 0)
-                {
-                    if (Items[i].Name != "Aged Brie")
-                    {
-                        if (Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].Quality > 0)
-                            {
-                                if (Items[i].Name != "Sulfuras, Hand of Ragnaros" && Items[i].Name != "Conjured Mana Cake")
-                                {
-                                    Items[i].Quality = Items[i].Quality - 1;
-                                }
-
-                                // temp solution
-                                if (Items[i].Name == "Conjured Mana Cake")
-                                {
-                                    Items[i].Quality = Items[i].Quality == 1 ? 0 : Items[i].Quality - 2;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Items[i].Quality = Items[i].Quality - Items[i].Quality;
-                        }
-                    }
-                    else
-                    {
-                        if (Items[i].Quality < 50)
-                        {
-                            Items[i].Quality = Items[i].Quality + 1;
-                        }
-                    }
-                }
+                item.Quality = product.CalcuateQuality(item.Quality, item.SellIn);
+                item.SellIn = product.CalculateSellIn(item.SellIn);
             }
         }
     }

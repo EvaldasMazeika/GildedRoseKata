@@ -5,32 +5,6 @@ namespace GildedRose.UnitTests
 {
     public class GildedRoseTest
     {
-        // ordinary stuff:
-        // each day -1 sellin and -1 quality
-        // when sellin < 0 then quality drops by -2
-        // quality can be 0 as minimum and 50 as maximum
-
-        // Sulfuras:
-        // quality is always 80
-        // sellin is always the same
-
-        // Aged Brie:
-        // each day +1 when date is positive
-        // each day +2 when date is negative
-        // maximum quality is 50
-
-        // Backstage passes:
-        // quality drops to 0 after concert
-        // quality +1 when there is more than 10 days left
-        // quality +2 when 10 or less days
-        // quality +3 when 5 days or less
-
-        // Conjured stuff:
-        // Twice as fast as ordinary stuff, which means:
-        // Each day -2 quality and
-        // when sellin < 0 then quality drops by -4
-        // quality can be 0 as minimum and 50 as maximum
-
         [Theory]
         [InlineData("Cola", 5, 7, 6)]
         [InlineData("Cola", 0, 2, 0)]
